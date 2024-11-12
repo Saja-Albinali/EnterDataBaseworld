@@ -38,22 +38,14 @@ public class UserController {
     public ResponseEntity<String> updateStatus(@RequestParam Long userId, @RequestParam String status) {
         try {
             UserResponse updateResponse = userService.updateStatus(userId, status);
-
             if (updateResponse != null) {
-                if ("Inactive".equalsIgnoreCase(status)) {
-                    return ResponseEntity.status(HttpStatus.OK).body("User status has been set to Inactive.");
-                } else {
-                    return ResponseEntity.status(HttpStatus.OK).body("User status updated successfully to Active.");
-                }
+                return ResponseEntity.status(HttpStatus.OK).body("Updated Successfully");
             } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body("Invalid status provided. Allowed values are 'Active' or 'Inactive'.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
             }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error updating status: " + e.getMessage());
         }
-    }
 
 }
