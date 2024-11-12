@@ -33,8 +33,11 @@ public class UserServiceImpl implements UserService {
         return response;
     }
 
-    @Override
+   @Override
     public UserResponse updateStatus(Long id, String status) {
+        if (!status.equalsIgnoreCase("Active") && !status.equalsIgnoreCase("Inactive")) {
+            throw new IllegalArgumentException("Invalid status Status must be either 'Active' or 'Inactive'.");
+        }
         UserEntity userEntity = userRepository.findById(id).orElse(null);
         userEntity.setStatus(Status.valueOf(status));
         userEntity = userRepository.save(userEntity);
